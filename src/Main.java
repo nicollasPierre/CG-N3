@@ -22,8 +22,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private GL gl;
 	private GLU glu;
 	private GLAutoDrawable glDrawable;
-	private Ponto4D pto1 = new Ponto4D(0.0, 0.0, 0.0, 1.0);
-	private Ponto4D pto2 = new Ponto4D(200.0, 200.0, 0.0, 1.0);
 
 	public void init(GLAutoDrawable drawable) {
 		System.out.println(" --- init ---");
