@@ -1,46 +1,139 @@
 package br.com.furb.cg.n3.model;
 
-public class ObjetoGrafico {
-	private int[] cor;
-	private Ponto4D[] listaPto;
-	private BBox3D bBox;
-	private int primitiva;
-	public int[] getCor() {
-		return cor;
+import java.util.ArrayList;
+
+import javax.media.opengl.GL;
+public final class ObjetoGrafico {
+	GL gl;
+	private float tamanho = 2.0f;
+
+	private int primitiva = GL.GL_LINE_LOOP;
+	private ArrayList<Ponto4D> vertices = new ArrayList<>();
+
+//	private int primitiva = GL.GL_POINTS;
+//	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
+
+	private Transformacao4D matrizObjeto = new Transformacao4D();
+
+	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
+	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
+	private static Transformacao4D matrizTmpTranslacaoInversa = new Transformacao4D();
+	private static Transformacao4D matrizTmpEscala = new Transformacao4D();		
+//	private static Transformacao4D matrizTmpRotacaoZ = new Transformacao4D();
+	private static Transformacao4D matrizGlobal = new Transformacao4D();
+//	private double anguloGlobal = 0.0;
+	
+	public ObjetoGrafico() {
 	}
-	public void setCor(int[] cor) {
-		this.cor = cor;
+
+	public void atribuirGL(GL gl) {
+		this.gl = gl;
 	}
-	public Ponto4D[] getListaPto() {
-		return listaPto;
+
+	public double obterTamanho() {
+		return tamanho;
 	}
-	public void setListaPto(Ponto4D[] listaPto) {
-		this.listaPto = listaPto;
-	}
-	public BBox3D getbBox() {
-		return bBox;
-	}
-	public void setbBox(BBox3D bBox) {
-		this.bBox = bBox;
-	}
-	public int getPrimitiva() {
+
+	public double obterPrimitava() {
 		return primitiva;
 	}
-	public void setPrimitiva(int primitiva) {
-		this.primitiva = primitiva;
+	
+	public void desenha() {
+		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glLineWidth(tamanho);
+		gl.glPointSize(tamanho);
+
+		gl.glPushMatrix();
+			gl.glMultMatrixd(matrizObjeto.GetDate(), 0);
+			gl.glBegin(primitiva);
+				for (Ponto4D vertice : vertices) {
+					gl.glVertex2d(vertice.obterX(), vertice.obterY());
+				}
+			gl.glEnd();
+
+			//////////// ATENCAO: chamar desenho dos filhos... 
+
+		gl.glPopMatrix();
 	}
-	public ObjetoGrafico(int[] cor, Ponto4D[] listaPto, BBox3D bBox, int primitiva) {
-		super();
-		this.cor = cor;
-		this.listaPto = listaPto;
-		this.bBox = bBox;
-		this.primitiva = primitiva;
+
+	public void translacaoXYZ(double tx, double ty, double tz) {
+		Transformacao4D matrizTranslate = new Transformacao4D();
+		matrizTranslate.atribuirTranslacao(tx,ty,tz);
+		matrizObjeto = matrizTranslate.transformMatrix(matrizObjeto);		
+	}
+
+	public void escalaXYZ(double Sx,double Sy) {
+		Transformacao4D matrizScale = new Transformacao4D();		
+		matrizScale.atribuirEscala(Sx,Sy,1.0);
+		matrizObjeto = matrizScale.transformMatrix(matrizObjeto);
+	}
+
+	///TODO: erro na rotacao
+	public void rotacaoZ(double angulo) {
+//		anguloGlobal += 10.0; // rotacao em 10 graus
+//		Transformacao4D matrizRotacaoZ = new Transformacao4D();		
+//		matrizRotacaoZ.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
+//		matrizObjeto = matrizRotacaoZ.transformMatrix(matrizObjeto);
 	}
 	
-	public void desenhar(){
-		
+	public void atribuirIdentidade() {
+//		anguloGlobal = 0.0;
+		matrizObjeto.atribuirIdentidade();
+	}
+
+	public void escalaXYZPtoFixo(double escala, Ponto4D ptoFixo) {
+		matrizGlobal.atribuirIdentidade();
+
+		matrizTmpTranslacao.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
+		matrizGlobal = matrizTmpTranslacao.transformMatrix(matrizGlobal);
+
+		matrizTmpEscala.atribuirEscala(escala, escala, 1.0);
+		matrizGlobal = matrizTmpEscala.transformMatrix(matrizGlobal);
+
+		ptoFixo.inverterSinal(ptoFixo);
+		matrizTmpTranslacaoInversa.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
+		matrizGlobal = matrizTmpTranslacaoInversa.transformMatrix(matrizGlobal);
+
+		matrizObjeto = matrizObjeto.transformMatrix(matrizGlobal);
+	}
+	
+	public void rotacaoZPtoFixo(double angulo, Ponto4D ptoFixo) {
+		matrizGlobal.atribuirIdentidade();
+
+		matrizTmpTranslacao.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
+		matrizGlobal = matrizTmpTranslacao.transformMatrix(matrizGlobal);
+
+		matrizTmpEscala.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
+		matrizGlobal = matrizTmpEscala.transformMatrix(matrizGlobal);
+
+		ptoFixo.inverterSinal(ptoFixo);
+		matrizTmpTranslacaoInversa.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
+		matrizGlobal = matrizTmpTranslacaoInversa.transformMatrix(matrizGlobal);
+
+		matrizObjeto = matrizObjeto.transformMatrix(matrizGlobal);
+	}
+
+	public void exibeMatriz() {
+		matrizObjeto.exibeMatriz();
+	}
+
+	public void exibeVertices() {
+		for (Ponto4D vertice : vertices) {
+
+			System.out.println("P0[" + vertice.obterX() + "," + vertice.obterY() + "," + vertice.obterZ() + "," + vertice.obterW() + "]");	
+		}
+//		System.out.println("anguloGlobal:" + anguloGlobal);
+	}
+	
+	public void setVertice(ArrayList<Ponto4D> vertices){
+		this.vertices = vertices;
 	}
 	
 	
+	public ArrayList<Ponto4D> getVertices(){
+		return vertices;
+	}
+
 	
 }
+

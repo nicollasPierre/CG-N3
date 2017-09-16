@@ -1,4 +1,5 @@
 package br.com.furb.cg.n3.model;
+
 /// \file Ponto4D.java
 /// \brief Classe que define ponto no espaco 3D
 /// \version $Revision: 1.7 $
