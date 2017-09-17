@@ -36,6 +36,10 @@ public class Mundo {
 	public void setListaObjetos(ArrayList<ObjetoGrafico> listaObjetos) {
 		this.listaObjetos = listaObjetos;
 	}
+	
+	public void addObjeto(ObjetoGrafico poligono){
+		this.listaObjetos.add(poligono);
+	}
 
 	public int[] getCorFundo() {
 		return corFundo;

@@ -6,7 +6,7 @@ import javax.media.opengl.GL;
 public final class ObjetoGrafico {
 	GL gl;
 	private float tamanho = 2.0f;
-
+	private Ponto4D verticeSelecionado;
 	private int primitiva = GL.GL_LINE_LOOP;
 	private ArrayList<Ponto4D> vertices = new ArrayList<>();
 
@@ -38,6 +38,14 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 	
+	public Ponto4D getVerticeSelecionado() {
+		return verticeSelecionado;
+	}
+
+	public void setVerticeSelecionado(Ponto4D verticeSelecionado) {
+		this.verticeSelecionado = verticeSelecionado;
+	}
+
 	public void desenha() {
 		gl.glColor3f(0.0f, 0.0f, 0.0f);
 		gl.glLineWidth(tamanho);
