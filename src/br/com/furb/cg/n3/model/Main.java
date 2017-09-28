@@ -248,8 +248,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	 *            Posição Y do mouse
 	 */
 	public void mouseUnitToGlUnit(int x, int y) {
-		valorX = (30.0 - x / 400.0 * 60.0) * -1.0;
-		valorY = 30.0 - y / 400.0 * 60.0;
+		valorX = ((30.0 - x / 400.0 * 60.0) * -1.0)+1;
+		valorY = (30.0 - y / 400.0 * 60.0)-1;
 
 		System.out.println("X = " + valorX);
 		System.out.println("Y = " + valorY);
