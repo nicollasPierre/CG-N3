@@ -17,7 +17,9 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private GL gl;
 	private GLU glu;
 	private GLAutoDrawable glDrawable;
-
+	private ArrayList<Ponto4D> objetoTempVertices;
+	private Ponto4D pontoMouse;
+	
 	// private ObjetoGrafico objeto = new ObjetoGrafico();
 	// private ArrayList<ObjetoGrafico> objetos = new ArrayList<>();
 
@@ -63,6 +65,10 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
 			objeto.desenha();
 		}
+		if(objetoTempVertices != null && objetoTempVertices.size() > 0){
+			desenhaTemp();
+		}
+		
 
 		// objeto.desenha();
 
@@ -82,6 +88,18 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		gl.glEnd();
 	}
 
+	public void desenhaTemp(){
+		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glBegin(GL.GL_LINE_STRIP);
+		for(int i = 0; i < objetoTempVertices.size(); i++){
+			gl.glVertex2d(objetoTempVertices.get(i).obterX(), objetoTempVertices.get(i).obterY());
+		}
+		if (pontoMouse != null){
+			gl.glVertex2d(pontoMouse.obterX(), pontoMouse.obterY());
+		}
+		gl.glEnd();
+	}
+	
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyCode()) {
@@ -118,6 +136,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				mundo.getPoligonoSelecionado().atribuirGL(gl);
 				mundo.getListaObjetos().add(mundo.getPoligonoSelecionado());
 				mundo.setPoligonoSelecionado(null);
+				
+				pontoMouse = null;
 			} else {
 				System.out.println("Sem polignos na lista");
 			}
@@ -133,6 +153,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				mundo.getPoligonoSelecionado().getVertices().remove(mundo.getPoligonoSelecionado().getVerticeSelecionado());
 				mundo.getPoligonoSelecionado().setVerticeSelecionado(null);
 				mundo.setPoligonoSelecionado(null);
+			}
+			break;
+		case KeyEvent.VK_M:
+			if (mundo.getPoligonoSelecionado() != null){
+				
 			}
 			break;
 		}
@@ -179,6 +204,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		if (mundo.getPoligonoSelecionado() != null){
+			mouseUnitToGlUnit(e.getX(), e.getY());
+			pontoMouse = new Ponto4D(valorX, valorY, 0, 0);
+			glDrawable.display();
+		}
 		// mouseMoviment(e.getX(), e.getY());
 	}
 
@@ -190,11 +220,17 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			mouseUnitToGlUnit(e.getX(), e.getY());
 			if (mundo.getPoligonoSelecionado() != null) {
 				mundo.getPoligonoSelecionado().getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
+				
+				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
 			} else {
 				ObjetoGrafico poligno = new ObjetoGrafico();
 				poligno.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
 				mundo.setPoligonoSelecionado(poligno);
+				
+				objetoTempVertices = new ArrayList<Ponto4D>();
+				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
 			}
+			glDrawable.display();
 			break;
 		/*
 		 * case MouseEvent.BUTTON1://caso botão esquerdo do mouse...
