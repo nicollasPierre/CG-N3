@@ -136,7 +136,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				mundo.getPoligonoSelecionado().atribuirGL(gl);
 				mundo.getListaObjetos().add(mundo.getPoligonoSelecionado());
 				mundo.setPoligonoSelecionado(null);
-				
+			    objetoTempVertices.clear();
 				pontoMouse = null;
 			} else {
 				System.out.println("Sem polignos na lista");
