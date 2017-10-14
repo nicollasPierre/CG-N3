@@ -19,6 +19,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private GLAutoDrawable glDrawable;
 	private ArrayList<Ponto4D> objetoTempVertices;
 	private Ponto4D pontoMouse;
+	private ObjetoGrafico objetoTemporario;
 	
 	// private ObjetoGrafico objeto = new ObjetoGrafico();
 	// private ArrayList<ObjetoGrafico> objetos = new ArrayList<>();
@@ -131,11 +132,12 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 */
 
 		case KeyEvent.VK_SPACE:
-			if (mundo.getPoligonoSelecionado() != null) {
-				mundo.getPoligonoSelecionado().exibeVertices();
-				mundo.getPoligonoSelecionado().atribuirGL(gl);
-				mundo.getListaObjetos().add(mundo.getPoligonoSelecionado());
-				mundo.setPoligonoSelecionado(null);
+			if (objetoTemporario != null) {
+				objetoTemporario.exibeVertices();
+				objetoTemporario.atribuirGL(gl);
+				mundo.getListaObjetos().add(objetoTemporario);
+				mundo.setPoligonoSelecionado(objetoTemporario);
+				objetoTemporario = null;
 			    objetoTempVertices.clear();
 				pontoMouse = null;
 			} else {
@@ -218,14 +220,13 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		case MouseEvent.BUTTON3:// caso botão direito do mouse...
 			System.out.println("Botão direito apertado");
 			mouseUnitToGlUnit(e.getX(), e.getY());
-			if (mundo.getPoligonoSelecionado() != null) {
-				mundo.getPoligonoSelecionado().getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
+			if (objetoTemporario != null) {
+				objetoTemporario.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
 				
 				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
 			} else {
-				ObjetoGrafico poligno = new ObjetoGrafico();
-				poligno.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
-				mundo.setPoligonoSelecionado(poligno);
+				objetoTemporario = new ObjetoGrafico();
+				objetoTemporario.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
 				
 				objetoTempVertices = new ArrayList<Ponto4D>();
 				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
@@ -237,6 +238,14 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 * System.out.println("Botão esquerdo apertado");
 		 * mundo.setPoligonoSelecionado(achaVertice(e.getX(), e.getY())); break;
 		 */
+		case MouseEvent.BUTTON1: // caso botão esquerdo do mouse...
+			mouseUnitToGlUnit(e.getX(), e.getY());
+			for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
+				if(objeto.getBbox().isInsideBBox(new Ponto4D(valorX, valorY, 0,0))){
+					mundo.setPoligonoSelecionado(objeto);
+					break;
+				}
+			}
 		default:
 			break;
 		}
@@ -259,6 +268,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void mousePressed(MouseEvent e) {
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:// caso botão esquerdo do mouse...
+			
 			System.out.println("Botão esquerdo apertado");
 			mundo.setPoligonoSelecionado(achaVertice(e.getX(), e.getY()));
 			break;
@@ -292,16 +302,16 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	}
 
 	/**
-	 * Procura se tem um vertice numa area de 3 GL units da posição selecionada.
-	 * 
+	 * Procura o vertice mais perto da area selecionada do poligno selecionado
+	 *
 	 * @param Posição
 	 *            X do mouse
 	 * @param Posição
 	 *            Y do mouse
-	 * @return O poligno que possui o primeiro vertice encontrado
+	 * @return O vértice mais próximo do poligno selecionado
 	 */
 	private ObjetoGrafico achaVertice(int x, int y) {
-		mouseUnitToGlUnit(x, y);
+		/*mouseUnitToGlUnit(x, y);
 		for (ObjetoGrafico poligono : mundo.getListaObjetos()) {
 			for (Ponto4D vertice : poligono.getVertices()) {
 				if (vertice.obterX() < valorX + 3 && vertice.obterX() > valorX - 3 && vertice.obterY() < valorY + 3
@@ -313,7 +323,21 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			}
 		}
 		System.out.println("Nenhum Vertice encontrado");
-		return null;
+		return null;*/
+		
+		mouseUnitToGlUnit(x, y);
+		double menorDistancia = Double.MAX_VALUE;
+		Ponto4D verticeMaisPerto = null;
+		for (Ponto4D vertice : mundo.getPoligonoSelecionado().getVertices()) {
+			double distanciaAtual = vertice.distanciaDeOutroPonto2D(valorX, valorY);
+			System.out.println("Distância atual "+ distanciaAtual);
+			if( distanciaAtual < menorDistancia){
+				menorDistancia = distanciaAtual;
+				verticeMaisPerto = vertice;
+			}
+		}
+		mundo.getPoligonoSelecionado().setVerticeSelecionado(verticeMaisPerto);
+		return mundo.getPoligonoSelecionado();
 
 	}
 

@@ -9,7 +9,7 @@ public final class ObjetoGrafico {
 	private Ponto4D verticeSelecionado;
 	private int primitiva = GL.GL_LINE_LOOP;
 	private ArrayList<Ponto4D> vertices = new ArrayList<>();
-
+	private BBox3D bbox = new BBox3D();
 //	private int primitiva = GL.GL_POINTS;
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
 
@@ -37,7 +37,18 @@ public final class ObjetoGrafico {
 	public double obterPrimitava() {
 		return primitiva;
 	}
+
 	
+	
+	public BBox3D getBbox() {
+		bbox.setBBox3D(this);
+		return bbox;
+	}
+
+	public void setBbox(BBox3D bbox) {
+		this.bbox = bbox;
+	}
+
 	public Ponto4D getVerticeSelecionado() {
 		return verticeSelecionado;
 	}

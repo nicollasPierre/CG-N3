@@ -71,6 +71,17 @@ public final class Ponto4D {
 		this.z = z;
 	}
 
+	public double distanciaDeOutroPonto2D(double x, double y){
+		double distancia = Math.sqrt((this.obterX() - x)*(this.obterX() - x) + (this.obterY() - y)*(this.obterY() - y));
+		if(distancia < 0)
+			distancia = distancia * - 1;
+		return	distancia;
+	}
+	
+	public double distanciaDeOutroPonto2D(Ponto4D ponto){
+		return distanciaDeOutroPonto2D(ponto.obterX(), ponto.obterY());
+	}
+	
 	/// Atribuir valor W do ponto.
 //	public void AtribuirW(double w) {
 //		this.w = w;
