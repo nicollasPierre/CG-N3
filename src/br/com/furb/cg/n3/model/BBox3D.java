@@ -60,7 +60,7 @@ public class BBox3D {
 
 	public boolean isInsideBBox(Ponto4D ponto) {
 
-		return (xMin <= ponto.obterX() && ponto.obterX() <= xMax && yMin <= ponto.obterX() && ponto.obterX() <= yMax);
+		return (xMin <= ponto.obterX() && ponto.obterX() <= xMax && yMin <= ponto.obterY() && ponto.obterY() <= yMax);
 	}
 
 	public void setBBox3D(ObjetoGrafico objeto) {
