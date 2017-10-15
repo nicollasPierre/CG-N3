@@ -7,6 +7,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+@SuppressWarnings("LossyEncoding")
 public class Frame extends JFrame{
 
 	private static final long serialVersionUID = 1L;
@@ -17,7 +18,7 @@ public class Frame extends JFrame{
 	public Frame() {		
 		// Cria o frame.
 		super("CG-N3_Trasnformacao");   
-		setBounds(300,250,janelaLargura,janelaAltura+22);  // 400 + 22 da borda do t’tulo da janela
+		setBounds(300,250,janelaLargura,janelaAltura+22);  // 400 + 22 da borda do tï¿½tulo da janela
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 

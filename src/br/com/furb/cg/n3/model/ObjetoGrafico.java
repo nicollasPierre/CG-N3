@@ -147,7 +147,66 @@ public final class ObjetoGrafico {
 	public void setVertice(ArrayList<Ponto4D> vertices){
 		this.vertices = vertices;
 	}
-	
+
+	public boolean isClickInside(Ponto4D clickPoint) {
+		if(getBbox().isInsideBBox(clickPoint)) {
+			int nrIntersections = 0;
+
+			for (int i=0; i < vertices.size(); i++) {
+
+				Ponto4D pi = vertices.get(i);
+
+				Ponto4D pP = vertices.get(0);
+				if(i < vertices.size()-1) {
+					pP = vertices.get(i+1);
+				}
+
+				if()
+
+				if(pi.obterY() != pP.obterY()) {
+					Ponto4D intersectionPoint = discoverIntersection(pi, pP, clickPoint.obterY());
+					if(intersectionPoint.obterX() == clickPoint.obterX()) {
+						return true; //Está sobre o lado
+					} else {
+						if(intersectionPoint.obterX() > clickPoint.obterX()
+								&& clickPoint.obterY() > getSmaller(pi.obterY(),pP.obterY())
+								&& clickPoint.obterY() <=  getBigger(pi.obterY(),pP.obterY())) {
+							nrIntersections++;
+						}
+					}
+				} else {
+					if(clickPoint.obterY() == pi.obterY()
+							&& clickPoint.obterX() >= getSmaller(pi.obterX(),pP.obterX())
+							&& clickPoint.obterX() <=  getBigger(pi.obterX(),pP.obterX())) {
+						return true; // Está sobre o lado horizontal
+					}
+				}
+			}
+			System.out.println("Click inside BBox? " + isOdd(nrIntersections) + ". Amount of intersections: "+nrIntersections);
+			return isOdd(nrIntersections);
+		} else {
+			System.out.println("Click not inside BBox");
+			return false;
+		}
+	}
+
+	public Ponto4D discoverIntersection(Ponto4D p1, Ponto4D p2, double y) {
+		double t = (y - p1.obterY()) / (p2.obterY() - p1.obterY());
+		double x = p1.obterX() + (p2.obterX() - p1.obterX())*t;
+		return new Ponto4D(x, y,0,0);
+	}
+
+	private double getSmaller(double val1, double val2){
+		return val1 < val2 ? val1 : val2;
+	}
+
+	private double getBigger(double val1, double val2) {
+		return val1 > val2 ? val1 : val2;
+	}
+
+	private boolean isOdd(int number){
+		return number % 2 != 0;
+	}
 	
 	public ArrayList<Ponto4D> getVertices(){
 		return vertices;
