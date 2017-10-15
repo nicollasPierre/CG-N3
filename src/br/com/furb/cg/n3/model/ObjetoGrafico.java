@@ -10,6 +10,8 @@ public final class ObjetoGrafico {
 	private int primitiva = GL.GL_LINE_LOOP;
 	private ArrayList<Ponto4D> vertices = new ArrayList<>();
 	private BBox3D bbox = new BBox3D();
+	private ArrayList<ObjetoGrafico> childrenObjects = new ArrayList<>();
+	private boolean isChild = false;
 //	private int primitiva = GL.GL_POINTS;
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
 
@@ -70,7 +72,9 @@ public final class ObjetoGrafico {
 				}
 			gl.glEnd();
 
-			//////////// ATENCAO: chamar desenho dos filhos... 
+			for (ObjetoGrafico child : childrenObjects) {
+				child.desenha();
+			}
 
 		gl.glPopMatrix();
 	}
@@ -226,6 +230,22 @@ public final class ObjetoGrafico {
 	
 	public double getMatrizObjetoX(){
 		return matrizObjeto.getMatriz()[12];
+	}
+
+	public void addChild(ObjetoGrafico child) {
+		this.childrenObjects.add(child);
+	}
+
+	public ArrayList<ObjetoGrafico> getChildren() {
+		return this.childrenObjects;
+	}
+
+	public boolean isChild() {
+		return this.isChild;
+	}
+
+	public void setIsChild(boolean isChild) {
+		this.isChild = isChild;
 	}
 }
 

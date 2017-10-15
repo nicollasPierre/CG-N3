@@ -20,6 +20,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private ArrayList<Ponto4D> objetoTempVertices;
 	private Ponto4D pontoMouse;
 	private ObjetoGrafico objetoTemporario;
+	private boolean nextIsChild = false;
 
 	// private ObjetoGrafico objeto = new ObjetoGrafico();
 	// private ArrayList<ObjetoGrafico> objetos = new ArrayList<>();
@@ -64,7 +65,9 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 */
 		desenhaSRU();
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
-			objeto.desenha();
+		    if(!objeto.isChild()) {
+                objeto.desenha();
+            }
 		}
 		if (objetoTempVertices != null && objetoTempVertices.size() > 0) {
 			desenhaTemp();
@@ -132,11 +135,21 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 
 		case KeyEvent.VK_SPACE:
 			if (objetoTemporario != null) {
-				objetoTemporario.exibeVertices();
+
+                objetoTemporario.exibeVertices();
 				objetoTemporario.atribuirGL(gl);
 				mundo.getListaObjetos().add(objetoTemporario);
-				mundo.setPoligonoSelecionado(objetoTemporario);
-				mundo.getPoligonoSelecionado().setBbox();
+
+                objetoTemporario.setBbox();
+
+                if(nextIsChild) {
+                    objetoTemporario.setIsChild(true);
+                    mundo.getPoligonoSelecionado().addChild(objetoTemporario);
+                    nextIsChild = false;
+                } else {
+                    mundo.setPoligonoSelecionado(objetoTemporario);
+                }
+
 				objetoTemporario = null;
 				objetoTempVertices.clear();
 				pontoMouse = null;
@@ -190,6 +203,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
         case KeyEvent.VK_SUBTRACT:
             mundo.getPoligonoSelecionado().escalaXYZ(0.95, 0.95);
             mundo.getPoligonoSelecionado().exibeVertices();
+            break;
+        case KeyEvent.VK_F:
+            if (objetoTemporario == null) {
+                nextIsChild = true;
+            }
             break;
 		}
 		glDrawable.display();
