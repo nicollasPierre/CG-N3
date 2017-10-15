@@ -72,7 +72,7 @@ public class Mundo {
 	 */
 	public boolean lookIfInside(double x, double y){
 		for (ObjetoGrafico objeto : getListaObjetos()) {
-			if (objeto.getBbox().isInsideBBox(new Ponto4D(x-objeto.getMatrizObjetoX(), y-objeto.getMatrizObjetoY(), 0, 0))) {
+			if (objeto.isClickInside(new Ponto4D(x-objeto.getMatrizObjetoX(), y-objeto.getMatrizObjetoY(), 0, 0))) {
 				this.setPoligonoSelecionado(objeto);
 				return true;
 			}
