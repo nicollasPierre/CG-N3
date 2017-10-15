@@ -241,12 +241,10 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		case MouseEvent.BUTTON1: // caso botão esquerdo do mouse...
 			mouseUnitToGlUnit(e.getX(), e.getY());
 			for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
-				//if(objeto.getBbox().isInsideBBox(new Ponto4D(valorX, valorY, 0,0))) {
-				    if(objeto.isClickInside(new Ponto4D(valorX, valorY, 0,0))) {
-                        mundo.setPoligonoSelecionado(objeto);
-                        break;
-                    }
-				//}
+                if(objeto.isClickInside(new Ponto4D(valorX, valorY, 0,0))) {
+                    mundo.setPoligonoSelecionado(objeto);
+                    break;
+                }
 			}
 		default:
 			break;

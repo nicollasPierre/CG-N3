@@ -161,8 +161,6 @@ public final class ObjetoGrafico {
 					pP = vertices.get(i+1);
 				}
 
-				if()
-
 				if(pi.obterY() != pP.obterY()) {
 					Ponto4D intersectionPoint = discoverIntersection(pi, pP, clickPoint.obterY());
 					if(intersectionPoint.obterX() == clickPoint.obterX()) {
