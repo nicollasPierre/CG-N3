@@ -254,12 +254,14 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			}
 			glDrawable.display();
 			break;
-		/*
-		 * case MouseEvent.BUTTON1://caso botão esquerdo do mouse...
-		 * System.out.println("Botão esquerdo apertado");
-		 * mundo.setPoligonoSelecionado(achaVertice(e.getX(), e.getY())); break;
-		 */
-		
+		case MouseEvent.BUTTON1: // caso botão esquerdo do mouse...
+			/*mouseUnitToGlUnit(e.getX(), e.getY());
+			for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
+                if(objeto.isClickInside(new Ponto4D(e.getX(), e.getY(), 0,0))) {
+                    mundo.setPoligonoSelecionado(objeto);
+                    break;
+                }
+			}*/
 		default:
 			break;
 		}
@@ -309,7 +311,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	}
 
 	/**
-	 * Converte a poisão da unidade do mouse (Tamanho da tela em pixel) para
+	 * Converte a posição da unidade do mouse (Tamanho da tela em pixel) para
 	 * unidades do OpenGl (definida pelo Ortho2D) O valor convertido é colocado
 	 * na variável valorX e valorY;
 	 * 
@@ -326,10 +328,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	/**
 	 * Procura o vertice mais perto da area selecionada do poligno selecionado
 	 *
-	 * @param Posição
-	 *            X do mouse
-	 * @param Posição
-	 *            Y do mouse
+	 * @param x posição X do mouse
+	 * @param y posição Y do mouse
 	 * @return O vértice mais próximo do poligno selecionado
 	 */
 	private Ponto4D achaVertice(int x, int y) {
