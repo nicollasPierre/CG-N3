@@ -182,7 +182,7 @@ public final class ObjetoGrafico {
 					}
 				}
 			}
-			System.out.println("Click inside BBox? " + isOdd(nrIntersections) + ". Amount of intersections: "+nrIntersections);
+			System.out.println("Click object? " + isOdd(nrIntersections) + ". Amount of intersections: "+nrIntersections);
 			return isOdd(nrIntersections);
 		} else {
 			System.out.println("Click not inside BBox");

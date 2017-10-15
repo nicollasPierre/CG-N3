@@ -183,6 +183,14 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		case KeyEvent.VK_R://Reseta matriz
 			mundo.getPoligonoSelecionado().atribuirIdentidade();
 			break;
+        case KeyEvent.VK_ADD:
+            mundo.getPoligonoSelecionado().escalaXYZ(1.05, 1.05);
+            mundo.getPoligonoSelecionado().exibeVertices();
+            break;
+        case KeyEvent.VK_SUBTRACT:
+            mundo.getPoligonoSelecionado().escalaXYZ(0.95, 0.95);
+            mundo.getPoligonoSelecionado().exibeVertices();
+            break;
 		}
 		glDrawable.display();
 	}
