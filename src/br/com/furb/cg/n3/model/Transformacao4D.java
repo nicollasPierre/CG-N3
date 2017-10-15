@@ -142,5 +142,13 @@ public final class Transformacao4D {
 		System.out.println("|" + GetElement( 3) + " | "+ GetElement( 7) + " | " + GetElement(11) + " | "+ GetElement(15));
 	}
 
+	public double[] getMatriz() {
+		return matriz;
+	}
+
+	public void setMatriz(double[] matriz) {
+		this.matriz = matriz;
+	}
+
 	
 }

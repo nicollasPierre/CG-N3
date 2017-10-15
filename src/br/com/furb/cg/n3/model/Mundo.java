@@ -64,6 +64,19 @@ public class Mundo {
 	}
 	
 	
-	
-	
+	/**
+	 * Verifica a posição (x,y) está dentro da BBox de um objeto
+	 * @param x
+	 * @param y
+	 * @return True se estiver, false se não
+	 */
+	public boolean lookIfInside(double x, double y){
+		for (ObjetoGrafico objeto : getListaObjetos()) {
+			if (objeto.getBbox().isInsideBBox(new Ponto4D(x-objeto.getMatrizObjetoX(), y-objeto.getMatrizObjetoY(), 0, 0))) {
+				this.setPoligonoSelecionado(objeto);
+				return true;
+			}
+		}
+		return false;
+	}
 }
