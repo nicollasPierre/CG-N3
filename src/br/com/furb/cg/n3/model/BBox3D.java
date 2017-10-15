@@ -3,12 +3,23 @@ package br.com.furb.cg.n3.model;
 import java.util.ArrayList;
 
 public class BBox3D {
-	private double xMin = 0;
-	private double yMin = 0;
-	private double zMin = 0;
-	private double xMax = 0;
-	private double yMax = 0;
-	private double zMax = 0;
+	private double xMin;
+	private double yMin;
+	private double zMin;
+	private double xMax;
+	private double yMax;
+	private double zMax;
+
+	
+	public BBox3D() {
+		super();
+		xMin = Double.MAX_VALUE;
+		yMin = Double.MAX_VALUE;
+		zMin = Double.MAX_VALUE;
+		xMax = Double.MIN_VALUE;
+		yMax = Double.MIN_VALUE;
+		zMax = Double.MIN_VALUE;
+	}
 
 	public double getxMin() {
 		return xMin;
@@ -64,7 +75,13 @@ public class BBox3D {
 	}
 
 	public void setBBox3D(ObjetoGrafico objeto) {
-		for (Ponto4D ponto4d : objeto.getVertices()) {
+		xMin = Double.MAX_VALUE;
+		yMin = Double.MAX_VALUE;
+		zMin = Double.MAX_VALUE;
+		xMax = Double.MIN_VALUE;
+		yMax = Double.MIN_VALUE;
+		zMax = Double.MIN_VALUE;
+ 		for (Ponto4D ponto4d : objeto.getVertices()) {
 			if (ponto4d.obterX() < xMin) {
 				xMin = ponto4d.obterX();
 			}

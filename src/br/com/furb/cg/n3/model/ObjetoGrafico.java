@@ -41,12 +41,12 @@ public final class ObjetoGrafico {
 	
 	
 	public BBox3D getBbox() {
-		bbox.setBBox3D(this);
+		//bbox.setBBox3D(this);
 		return bbox;
 	}
 
-	public void setBbox(BBox3D bbox) {
-		this.bbox = bbox;
+	public void setBbox() {
+		this.bbox.setBBox3D(this);
 	}
 
 	public Ponto4D getVerticeSelecionado() {
@@ -78,8 +78,10 @@ public final class ObjetoGrafico {
 	public void translacaoXYZ(double tx, double ty, double tz) {
 		Transformacao4D matrizTranslate = new Transformacao4D();
 		matrizTranslate.atribuirTranslacao(tx,ty,tz);
-		matrizObjeto = matrizTranslate.transformMatrix(matrizObjeto);		
+		matrizObjeto = matrizTranslate.transformMatrix(matrizObjeto);
+		
 	}
+	
 
 	public void escalaXYZ(double Sx,double Sy) {
 		Transformacao4D matrizScale = new Transformacao4D();		
@@ -210,6 +212,20 @@ public final class ObjetoGrafico {
 		return vertices;
 	}
 
+	public Transformacao4D getMatrizObjeto() {
+		return matrizObjeto;
+	}
+
+	public void setMatrizObjeto(Transformacao4D matrizObjeto) {
+		this.matrizObjeto = matrizObjeto;
+	}
 	
+	public double getMatrizObjetoY(){
+		return matrizObjeto.getMatriz()[13];
+	}
+	
+	public double getMatrizObjetoX(){
+		return matrizObjeto.getMatriz()[12];
+	}
 }
 

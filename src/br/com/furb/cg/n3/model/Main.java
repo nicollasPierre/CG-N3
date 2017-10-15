@@ -20,7 +20,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private ArrayList<Ponto4D> objetoTempVertices;
 	private Ponto4D pontoMouse;
 	private ObjetoGrafico objetoTemporario;
-	
+
 	// private ObjetoGrafico objeto = new ObjetoGrafico();
 	// private ArrayList<ObjetoGrafico> objetos = new ArrayList<>();
 
@@ -66,10 +66,9 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
 			objeto.desenha();
 		}
-		if(objetoTempVertices != null && objetoTempVertices.size() > 0){
+		if (objetoTempVertices != null && objetoTempVertices.size() > 0) {
 			desenhaTemp();
 		}
-		
 
 		// objeto.desenha();
 
@@ -89,18 +88,18 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		gl.glEnd();
 	}
 
-	public void desenhaTemp(){
+	public void desenhaTemp() {
 		gl.glColor3f(0.0f, 0.0f, 0.0f);
 		gl.glBegin(GL.GL_LINE_STRIP);
-		for(int i = 0; i < objetoTempVertices.size(); i++){
+		for (int i = 0; i < objetoTempVertices.size(); i++) {
 			gl.glVertex2d(objetoTempVertices.get(i).obterX(), objetoTempVertices.get(i).obterY());
 		}
-		if (pontoMouse != null){
+		if (pontoMouse != null) {
 			gl.glVertex2d(pontoMouse.obterX(), pontoMouse.obterY());
 		}
 		gl.glEnd();
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyCode()) {
@@ -137,8 +136,9 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				objetoTemporario.atribuirGL(gl);
 				mundo.getListaObjetos().add(objetoTemporario);
 				mundo.setPoligonoSelecionado(objetoTemporario);
+				mundo.getPoligonoSelecionado().setBbox();
 				objetoTemporario = null;
-			    objetoTempVertices.clear();
+				objetoTempVertices.clear();
 				pontoMouse = null;
 			} else {
 				System.out.println("Sem polignos na lista");
@@ -151,16 +151,37 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			}
 			break;
 		case KeyEvent.VK_E:
-			if (mundo.getPoligonoSelecionado() != null && mundo.getPoligonoSelecionado().getVerticeSelecionado() != null) {
-				mundo.getPoligonoSelecionado().getVertices().remove(mundo.getPoligonoSelecionado().getVerticeSelecionado());
+			if (mundo.getPoligonoSelecionado() != null
+					&& mundo.getPoligonoSelecionado().getVerticeSelecionado() != null) {
+				mundo.getPoligonoSelecionado().getVertices()
+						.remove(mundo.getPoligonoSelecionado().getVerticeSelecionado());
 				mundo.getPoligonoSelecionado().setVerticeSelecionado(null);
-				mundo.setPoligonoSelecionado(null);
+				mundo.getPoligonoSelecionado().setBbox();
 			}
 			break;
 		case KeyEvent.VK_M:
-			if (mundo.getPoligonoSelecionado() != null){
-				
+			if (mundo.getPoligonoSelecionado() != null) {
+
 			}
+			break;
+		case KeyEvent.VK_RIGHT:
+			mundo.getPoligonoSelecionado().translacaoXYZ(2.0, 0.0, 0.0);
+			mundo.getPoligonoSelecionado().exibeVertices();
+			break;
+		case KeyEvent.VK_LEFT:
+			mundo.getPoligonoSelecionado().translacaoXYZ(-2.0, 0.0, 0.0);
+			mundo.getPoligonoSelecionado().exibeVertices();
+			break;
+		case KeyEvent.VK_UP:
+			mundo.getPoligonoSelecionado().translacaoXYZ(0.0, 2.0, 0.0);
+			mundo.getPoligonoSelecionado().exibeVertices();
+			break;
+		case KeyEvent.VK_DOWN:
+			mundo.getPoligonoSelecionado().translacaoXYZ(0.0, -2.0, 0.0);
+			mundo.getPoligonoSelecionado().exibeVertices();
+			break;
+		case KeyEvent.VK_R://Reseta matriz
+			mundo.getPoligonoSelecionado().atribuirIdentidade();
 			break;
 		}
 		glDrawable.display();
@@ -194,8 +215,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void mouseDragged(MouseEvent e) {
 		if (mundo.getPoligonoSelecionado() != null && mundo.getPoligonoSelecionado().getVerticeSelecionado() != null) {
 			mouseUnitToGlUnit(e.getX(), e.getY());
-			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirX(valorX);
-			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirY(valorY);
+			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirX(valorX-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[12]);
+			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirY(valorY-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[13]);
 		} else {
 			System.out.println("mouse arrastando sem ação");
 		}
@@ -206,7 +227,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (mundo.getPoligonoSelecionado() != null){
+		if (mundo.getPoligonoSelecionado() != null) {
 			mouseUnitToGlUnit(e.getX(), e.getY());
 			pontoMouse = new Ponto4D(valorX, valorY, 0, 0);
 			glDrawable.display();
@@ -222,26 +243,21 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			mouseUnitToGlUnit(e.getX(), e.getY());
 			if (objetoTemporario != null) {
 				objetoTemporario.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
-				
+
 				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
 			} else {
 				objetoTemporario = new ObjetoGrafico();
 				objetoTemporario.getVertices().add(new Ponto4D(valorX, valorY, 0, 0));
-				
+
 				objetoTempVertices = new ArrayList<Ponto4D>();
 				objetoTempVertices.add(new Ponto4D(valorX, valorY, 0, 0));
 			}
 			glDrawable.display();
 			break;
-		/*
-		 * case MouseEvent.BUTTON1://caso botão esquerdo do mouse...
-		 * System.out.println("Botão esquerdo apertado");
-		 * mundo.setPoligonoSelecionado(achaVertice(e.getX(), e.getY())); break;
-		 */
 		case MouseEvent.BUTTON1: // caso botão esquerdo do mouse...
-			mouseUnitToGlUnit(e.getX(), e.getY());
+			//mouseUnitToGlUnit(e.getX(), e.getY());
 			for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
-                if(objeto.isClickInside(new Ponto4D(valorX, valorY, 0,0))) {
+                if(objeto.isClickInside(new Ponto4D(e.getX(), e.getY(), 0,0))) {
                     mundo.setPoligonoSelecionado(objeto);
                     break;
                 }
@@ -268,9 +284,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void mousePressed(MouseEvent e) {
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:// caso botão esquerdo do mouse...
-			
 			System.out.println("Botão esquerdo apertado");
-			mundo.setPoligonoSelecionado(achaVertice(e.getX(), e.getY()));
+			mundo.lookIfInside(valorX, valorY);
+			if(mundo.getPoligonoSelecionado() != null){
+				mundo.getPoligonoSelecionado().setVerticeSelecionado(achaVertice(e.getX(), e.getY()));
+			}
 			break;
 		default:
 			break;
@@ -278,8 +296,17 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON1:// caso botão esquerdo do mouse...
+			if(mundo.getPoligonoSelecionado() != null){
+				mundo.getPoligonoSelecionado().setBbox();
+			}
+			break;
+		default:
+			break;
+		}
 
 	}
 
@@ -294,11 +321,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	 *            Posição Y do mouse
 	 */
 	public void mouseUnitToGlUnit(int x, int y) {
-		valorX = ((30.0 - x / 400.0 * 60.0) * -1.0)+1;
-		valorY = (30.0 - y / 400.0 * 60.0)-1;
-
-		System.out.println("X = " + valorX);
-		System.out.println("Y = " + valorY);
+		valorX = ((30.0 - x / 400.0 * 60.0) * -1.0) + 1;
+		valorY = (30.0 - y / 400.0 * 60.0) - 1;
 	}
 
 	/**
@@ -308,34 +332,18 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	 * @param y posição Y do mouse
 	 * @return O vértice mais próximo do poligno selecionado
 	 */
-	private ObjetoGrafico achaVertice(int x, int y) {
-		/*mouseUnitToGlUnit(x, y);
-		for (ObjetoGrafico poligono : mundo.getListaObjetos()) {
-			for (Ponto4D vertice : poligono.getVertices()) {
-				if (vertice.obterX() < valorX + 3 && vertice.obterX() > valorX - 3 && vertice.obterY() < valorY + 3
-						&& vertice.obterY() > valorY - 3) {
-					poligono.setVerticeSelecionado(vertice);
-					System.out.println("Vertice encontrado");
-					return poligono;
-				}
-			}
-		}
-		System.out.println("Nenhum Vertice encontrado");
-		return null;*/
-		
+	private Ponto4D achaVertice(int x, int y) {
 		mouseUnitToGlUnit(x, y);
 		double menorDistancia = Double.MAX_VALUE;
 		Ponto4D verticeMaisPerto = null;
 		for (Ponto4D vertice : mundo.getPoligonoSelecionado().getVertices()) {
-			double distanciaAtual = vertice.distanciaDeOutroPonto2D(valorX, valorY);
-			System.out.println("Distância atual "+ distanciaAtual);
-			if( distanciaAtual < menorDistancia){
+			double distanciaAtual = vertice.distanciaDeOutroPonto2D(valorX, valorY, mundo.getPoligonoSelecionado().getMatrizObjeto());
+			if (distanciaAtual < menorDistancia) {
 				menorDistancia = distanciaAtual;
 				verticeMaisPerto = vertice;
 			}
 		}
-		mundo.getPoligonoSelecionado().setVerticeSelecionado(verticeMaisPerto);
-		return mundo.getPoligonoSelecionado();
+		return verticeMaisPerto;
 
 	}
 

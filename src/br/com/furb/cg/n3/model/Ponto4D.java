@@ -70,14 +70,37 @@ public final class Ponto4D {
 	public void atribuirZ(double z) {
 		this.z = z;
 	}
-
+	/**
+	 * Acha a distância entre esse ponto e um outro
+	 * @param x Valor X do outro ponto
+	 * @param y Valor Y do outro ponto
+	 * @return Distancia do outro ponto (sempre positiva)
+	 */
 	public double distanciaDeOutroPonto2D(double x, double y){
-		double distancia = Math.sqrt((this.obterX() - x)*(this.obterX() - x) + (this.obterY() - y)*(this.obterY() - y));
+
+		return distanciaDeOutroPonto2D(x, y);
+	}
+	
+	/**
+	 * Acha a distância entre esse ponto e um outro
+	 * @param x Valor X do outro ponto
+	 * @param y Valor Y do outro ponto
+	 * @param matriz Matriz de transformação do poligno onde esse ponto está
+	 * @return Distancia do outro ponto (sempre positiva)
+	 */
+	public double distanciaDeOutroPonto2D(double x, double y, Transformacao4D matriz){
+		double distancia = Math.sqrt((this.obterX()+matriz.getMatriz()[12] - x)*(this.obterX()+matriz.getMatriz()[12] - x) 
+				+ (this.obterY()+matriz.getMatriz()[13] - y)*(this.obterY()+matriz.getMatriz()[13] - y));
 		if(distancia < 0)
 			distancia = distancia * - 1;
 		return	distancia;
 	}
 	
+	/**
+	 * Acha a distância entre esse ponto e um outro
+	 * @param ponto outro ponto no para saber a distancia
+	 * @return Distancia do outro ponto (sempre positiva)
+	 */
 	public double distanciaDeOutroPonto2D(Ponto4D ponto){
 		return distanciaDeOutroPonto2D(ponto.obterX(), ponto.obterY());
 	}
