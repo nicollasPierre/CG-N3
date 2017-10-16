@@ -69,10 +69,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
                 objeto.desenha();
             }
 		}
+		
 		if (objetoTempVertices != null && objetoTempVertices.size() > 0) {
 			desenhaTemp();
 		}
-
+		
 		// objeto.desenha();
 
 		gl.glFlush();
@@ -90,7 +91,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		gl.glVertex2f(0.0f, 20.0f);
 		gl.glEnd();
 	}
-
+	
 	public void desenhaTemp() {
 		gl.glColor3f(0.0f, 0.0f, 0.0f);
 		gl.glBegin(GL.GL_LINE_STRIP);
@@ -155,6 +156,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				pontoMouse = null;
 			} else {
 				System.out.println("Sem polignos na lista");
+			}
+			break;
+		case KeyEvent.VK_J:
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().rotacaoZ(0.5);
 			}
 			break;
 		case KeyEvent.VK_DELETE:
@@ -255,6 +261,9 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void mouseMoved(MouseEvent e) {
 		if (mundo.getPoligonoSelecionado() != null) {
 			mouseUnitToGlUnit(e.getX(), e.getY());
+			glDrawable.display();
+		}
+		if (objetoTempVertices != null && objetoTempVertices.size() > 0){
 			pontoMouse = new Ponto4D(valorX, valorY, 0, 0);
 			glDrawable.display();
 		}

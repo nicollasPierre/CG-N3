@@ -85,7 +85,6 @@ public final class ObjetoGrafico {
 		matrizObjeto = matrizTranslate.transformMatrix(matrizObjeto);
 		
 	}
-	
 
 	public void escalaXYZ(double Sx,double Sy) {
 		Transformacao4D matrizScale = new Transformacao4D();		
@@ -93,8 +92,61 @@ public final class ObjetoGrafico {
 		matrizObjeto = matrizScale.transformMatrix(matrizObjeto);
 	}
 
+	public double obterXMinimo(){
+		double menor = Double.MAX_VALUE;
+		for (int i = 0; i < getVertices().size(); i++) {
+			if(getVertices().get(i).obterX() < menor){
+				menor = getVertices().get(i).obterX();
+			}
+		}
+		return menor;
+	}
+	
+	public double obterYMinimo(){
+		double menor = Double.MAX_VALUE;
+		for (int i = 0; i < getVertices().size(); i++) {
+			if(getVertices().get(i).obterY() < menor){
+				menor = getVertices().get(i).obterY();
+			}
+		}
+		return menor;
+	}
+	
+	public double obterXMaximo(){
+		double maior = Double.MIN_VALUE;
+		for (int i = 0; i < getVertices().size(); i++) {
+			if(getVertices().get(i).obterX() > maior){
+				maior = getVertices().get(i).obterX();
+			}
+		}
+		return maior;
+	}
+	
+	public double obterYMaximo(){
+		double maior = Double.MIN_VALUE;
+		for (int i = 0; i < getVertices().size(); i++) {
+			if(getVertices().get(i).obterY() > maior){
+				maior = getVertices().get(i).obterY();
+			}
+		}
+		return maior;
+	}
+	
+	public Ponto4D obterPontoCentral(){
+		double x = (this.obterXMinimo() + this.obterXMaximo()) / 2d;
+		double y = (this.obterYMinimo() + this.obterYMaximo()) / 2d;
+		return new Ponto4D(x, y, 0.0, 0.0);
+	}
+	
 	///TODO: erro na rotacao
 	public void rotacaoZ(double angulo) {
+		Transformacao4D matrizRotacao = new Transformacao4D();
+		
+		matrizRotacao.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
+				
+		matrizObjeto = matrizRotacao.transformMatrix(matrizObjeto);
+		
+		
 //		anguloGlobal += 10.0; // rotacao em 10 graus
 //		Transformacao4D matrizRotacaoZ = new Transformacao4D();		
 //		matrizRotacaoZ.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
