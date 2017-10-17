@@ -61,11 +61,19 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	// "render" feito pelo cliente OpenGL.
 	public void display(GLAutoDrawable arg0) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-		glu.gluOrtho2D(-30.0f, 30.0f, -30.0f, 30.0f);
-
+		
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
+		glu.gluOrtho2D(mundo.getCamera().getMinX(),
+				mundo.getCamera().getMaxX(),
+				mundo.getCamera().getMinY(),
+				mundo.getCamera().getMaxY());
+		System.out.println(mundo.getCamera().toString());
+		
+		System.out.println(mundo.getCamera().getMaxY());
+
+		
 		gl.glLineWidth(1.0f);
 		gl.glPointSize(1.0f);
 
@@ -190,11 +198,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				mundo.getPoligonoSelecionado().setBbox();
 			}
 			break;
-		case KeyEvent.VK_M:
-			if (mundo.getPoligonoSelecionado() != null) {
-
-			}
-			break;
 		case KeyEvent.VK_RIGHT:
 			mundo.getPoligonoSelecionado().translacaoXYZ(2.0, 0.0, 0.0);
 			mundo.getPoligonoSelecionado().exibeVertices();
@@ -235,6 +238,25 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			}
 
         	mundo.getPoligonoSelecionado().setCor(cores.get(indiceCores));
+        	break;
+        case KeyEvent.VK_M:
+        	mundo.getCamera().zoomOut(1);
+        	break;
+        case KeyEvent.VK_N:
+        	mundo.getCamera().zoomIn(1);
+        	break;
+        case KeyEvent.VK_NUMPAD8:
+        	mundo.getCamera().pan(Camera2D.CIMA, 1);
+        	System.out.println("oi");
+        	break;
+        case KeyEvent.VK_NUMPAD4:
+        	mundo.getCamera().pan(Camera2D.ESQUERDA, 1);
+        	break;
+        case KeyEvent.VK_NUMPAD6:
+        	mundo.getCamera().pan(Camera2D.DIREITA, 1);
+        	break;
+        case KeyEvent.VK_NUMPAD2:
+        	mundo.getCamera().pan(Camera2D.BAIXO, 1);
         	break;
 		}
 		glDrawable.display();

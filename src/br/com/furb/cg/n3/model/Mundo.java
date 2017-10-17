@@ -11,6 +11,7 @@ public class Mundo {
 	
 	public Mundo() {
 		listaObjetos = new ArrayList<>();
+		camera = new Camera2D(-30.0f, 30.0f, -30.0f, 30.0f);
 	}
 	
 	public Camera2D getCamera() {
