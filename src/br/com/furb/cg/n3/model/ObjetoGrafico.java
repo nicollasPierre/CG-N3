@@ -81,17 +81,16 @@ public final class ObjetoGrafico {
 				}
 			gl.glEnd();
 
-			//gl.glBegin(primitiva);
+			/*gl.glBegin(primitiva);
+				gl.glColor3f(255,0,0);
+				gl.glLineWidth(tamanho);
+				gl.glPointSize(tamanho);
+				gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
+				gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
+				gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
+				gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMax());
 
-			//	gl.glColor3i(0,1,0);
-			//	gl.glLineWidth(tamanho);
-			//	gl.glPointSize(tamanho);
-			//	gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
-			//	gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
-			//	gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
-			//	gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMax());
-
-			//gl.glEnd();
+			gl.glEnd(); */
 
 			for (ObjetoGrafico child : childrenObjects) {
 				child.desenha();
@@ -109,11 +108,11 @@ public final class ObjetoGrafico {
 
 	public void escalaXYZ(double Sx,double Sy) {
 		Transformacao4D matrizScale = new Transformacao4D();		
-		matrizScale.atribuirEscala(Sx,Sy,1.0);
+		//matrizScale.atribuirEscala(Sx,Sy,1.0);
 		matrizObjeto = matrizScale.transformMatrix(matrizObjeto);
 		Ponto4D ponto = this.getBbox().getCenterPoint();
 		ponto = ponto.inverterSinal(ponto);
-		this.escalaXYZPtoFixo(1, ponto);
+		this.escalaXYZPtoFixo(Sx, Sy, ponto);
 
 	}
 
@@ -186,13 +185,13 @@ public final class ObjetoGrafico {
 		matrizObjeto.atribuirIdentidade();
 	}
 
-	public void escalaXYZPtoFixo(double escala, Ponto4D ptoFixo) {
+	public void escalaXYZPtoFixo(double Sx, double Sy, Ponto4D ptoFixo) {
 		matrizGlobal.atribuirIdentidade();
 
 		matrizTmpTranslacao.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
 		matrizGlobal = matrizTmpTranslacao.transformMatrix(matrizGlobal);
 
-		matrizTmpEscala.atribuirEscala(escala, escala, 1.0);
+		matrizTmpEscala.atribuirEscala(Sx, Sy, 1.0);
 		matrizGlobal = matrizTmpEscala.transformMatrix(matrizGlobal);
 
 		ptoFixo.inverterSinal(ptoFixo);
