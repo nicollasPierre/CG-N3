@@ -21,7 +21,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private Ponto4D pontoMouse;
 	private ObjetoGrafico objetoTemporario;
 	
-	private ArrayList<int[]> cores;
+	private ArrayList<int[]> cores = new ArrayList<>();
 	private int indiceCores = 0;
 	
 	private boolean nextIsChild = false;
@@ -50,8 +50,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		// objeto.atribuirGL(gl);
 		
 		int[] cor0 = {0, 0, 0};
-		int[] cor1 = {1, 0, 0};
-		int[] cor2 = {0, 1, 0};
+		int[] cor1 = {255, 0, 0};
+		int[] cor2 = {0, 255, 0};
 		cores.add(cor0);
 		cores.add(cor1);
 		cores.add(cor2);
@@ -76,6 +76,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 */
 		desenhaSRU();
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
+
 		    if(!objeto.isChild()) {
                 objeto.desenha();
             }
@@ -213,11 +214,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		case KeyEvent.VK_R://Reseta matriz
 			mundo.getPoligonoSelecionado().atribuirIdentidade();
 			break;
-        case KeyEvent.VK_ADD:
+        case KeyEvent.VK_P:
             mundo.getPoligonoSelecionado().escalaXYZ(1.05, 1.05);
             mundo.getPoligonoSelecionado().exibeVertices();
             break;
-        case KeyEvent.VK_SUBTRACT:
+        case KeyEvent.VK_O:
             mundo.getPoligonoSelecionado().escalaXYZ(0.95, 0.95);
             mundo.getPoligonoSelecionado().exibeVertices();
             break;
@@ -227,7 +228,12 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
             }
             break;
         case KeyEvent.VK_C:
-        	indiceCores++;
+        	if(indiceCores == 2) {
+        		indiceCores = 0;
+			} else {
+				indiceCores++;
+			}
+
         	mundo.getPoligonoSelecionado().setCor(cores.get(indiceCores));
         	break;
 		}
@@ -262,8 +268,8 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void mouseDragged(MouseEvent e) {
 		if (mundo.getPoligonoSelecionado() != null && mundo.getPoligonoSelecionado().getVerticeSelecionado() != null) {
 			mouseUnitToGlUnit(e.getX(), e.getY());
-			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirX(valorX-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[12]);
-			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirY(valorY-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[13]);
+			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirX((valorX-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[12])/mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[0]);
+			mundo.getPoligonoSelecionado().getVerticeSelecionado().atribuirY((valorY-mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[13])/mundo.getPoligonoSelecionado().getMatrizObjeto().getMatriz()[5]);
 		} else {
 			System.out.println("mouse arrastando sem ação");
 		}

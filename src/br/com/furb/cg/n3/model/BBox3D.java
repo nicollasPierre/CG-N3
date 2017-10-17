@@ -78,9 +78,9 @@ public class BBox3D {
 		xMin = Double.MAX_VALUE;
 		yMin = Double.MAX_VALUE;
 		zMin = Double.MAX_VALUE;
-		xMax = Double.MIN_VALUE;
-		yMax = Double.MIN_VALUE;
-		zMax = Double.MIN_VALUE;
+		xMax = Integer.MIN_VALUE;
+		yMax = Integer.MIN_VALUE;
+		zMax = Integer.MIN_VALUE;
  		for (Ponto4D ponto4d : objeto.getVertices()) {
 			if (ponto4d.obterX() < xMin) {
 				xMin = ponto4d.obterX();
@@ -106,5 +106,9 @@ public class BBox3D {
 				zMax = ponto4d.obterZ();
 			}
 		}
+	}
+
+	public Ponto4D getCenterPoint(){
+		return new Ponto4D((xMax + xMin) / 2 , (yMax + yMin)/ 2, 0,0);
 	}
 }

@@ -69,7 +69,7 @@ public final class ObjetoGrafico {
 
 	public void desenha() {
 		//gl.glColor3f(0.0f, 0.0f, 0.0f);
-		gl.glColor3i(cor[0], cor[1], cor[2]);
+		gl.glColor3f(cor[0], cor[1], cor[2]);
 		gl.glLineWidth(tamanho);
 		gl.glPointSize(tamanho);
 
@@ -80,6 +80,18 @@ public final class ObjetoGrafico {
 					gl.glVertex2d(vertice.obterX(), vertice.obterY());
 				}
 			gl.glEnd();
+
+			//gl.glBegin(primitiva);
+
+			//	gl.glColor3i(0,1,0);
+			//	gl.glLineWidth(tamanho);
+			//	gl.glPointSize(tamanho);
+			//	gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
+			//	gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
+			//	gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
+			//	gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMax());
+
+			//gl.glEnd();
 
 			for (ObjetoGrafico child : childrenObjects) {
 				child.desenha();
@@ -99,6 +111,10 @@ public final class ObjetoGrafico {
 		Transformacao4D matrizScale = new Transformacao4D();		
 		matrizScale.atribuirEscala(Sx,Sy,1.0);
 		matrizObjeto = matrizScale.transformMatrix(matrizObjeto);
+		Ponto4D ponto = this.getBbox().getCenterPoint();
+		ponto = ponto.inverterSinal(ponto);
+		this.escalaXYZPtoFixo(1, ponto);
+
 	}
 
 	public double obterXMinimo(){
@@ -152,7 +168,7 @@ public final class ObjetoGrafico {
 		Transformacao4D matrizRotacao = new Transformacao4D();
 		
 		matrizRotacao.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
-			Ponto4D ponto = obterPontoCentral();
+		Ponto4D ponto = this.getBbox().getCenterPoint();
 		
 		this.rotacaoZPtoFixo(angulo, ponto.inverterSinal(ponto));
 		
@@ -184,6 +200,9 @@ public final class ObjetoGrafico {
 		matrizGlobal = matrizTmpTranslacaoInversa.transformMatrix(matrizGlobal);
 
 		matrizObjeto = matrizObjeto.transformMatrix(matrizGlobal);
+
+		matrizObjeto.exibeMatriz();
+		this.exibeVertices();
 	}
 	
 	public void rotacaoZPtoFixo(double angulo, Ponto4D ptoFixo) {
@@ -288,12 +307,8 @@ public final class ObjetoGrafico {
 		this.matrizObjeto = matrizObjeto;
 	}
 	
-	public double getMatrizObjetoY(){
-		return matrizObjeto.getMatriz()[13];
-	}
-	
-	public double getMatrizObjetoX(){
-		return matrizObjeto.getMatriz()[12];
+	public double getMatrizObjeto(int pos){
+		return matrizObjeto.getMatriz()[pos];
 	}
 
 	public void addChild(ObjetoGrafico child) {
