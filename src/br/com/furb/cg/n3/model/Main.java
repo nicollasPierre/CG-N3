@@ -20,8 +20,12 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private ArrayList<Ponto4D> objetoTempVertices;
 	private Ponto4D pontoMouse;
 	private ObjetoGrafico objetoTemporario;
+	
+	private ArrayList<int[]> cores;
+	private int indiceCores = 0;
+	
 	private boolean nextIsChild = false;
-
+	
 	// private ObjetoGrafico objeto = new ObjetoGrafico();
 	// private ArrayList<ObjetoGrafico> objetos = new ArrayList<>();
 
@@ -44,6 +48,13 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			objeto.atribuirGL(gl);
 		}
 		// objeto.atribuirGL(gl);
+		
+		int[] cor0 = {0, 0, 0};
+		int[] cor1 = {1, 0, 0};
+		int[] cor2 = {0, 1, 0};
+		cores.add(cor0);
+		cores.add(cor1);
+		cores.add(cor2);
 	}
 
 	// metodo definido na interface GLEventListener.
@@ -215,6 +226,10 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
                 nextIsChild = true;
             }
             break;
+        case KeyEvent.VK_C:
+        	indiceCores++;
+        	mundo.getPoligonoSelecionado().setCor(cores.get(indiceCores));
+        	break;
 		}
 		glDrawable.display();
 	}

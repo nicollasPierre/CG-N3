@@ -12,6 +12,7 @@ public final class ObjetoGrafico {
 	private BBox3D bbox = new BBox3D();
 	private ArrayList<ObjetoGrafico> childrenObjects = new ArrayList<>();
 	private boolean isChild = false;
+	private int[] cor = { 0, 0, 0 };
 //	private int primitiva = GL.GL_POINTS;
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
 
@@ -26,6 +27,7 @@ public final class ObjetoGrafico {
 //	private double anguloGlobal = 0.0;
 	
 	public ObjetoGrafico() {
+		
 	}
 
 	public void atribuirGL(GL gl) {
@@ -40,7 +42,13 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 
+	public void setCor(int[] cor){
+		this.cor = cor;
+	}
 	
+	public int[] getCor(){
+		return this.cor;
+	}
 	
 	public BBox3D getBbox() {
 		//bbox.setBBox3D(this);
@@ -60,7 +68,8 @@ public final class ObjetoGrafico {
 	}
 
 	public void desenha() {
-		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		//gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glColor3i(cor[0], cor[1], cor[2]);
 		gl.glLineWidth(tamanho);
 		gl.glPointSize(tamanho);
 
@@ -143,8 +152,11 @@ public final class ObjetoGrafico {
 		Transformacao4D matrizRotacao = new Transformacao4D();
 		
 		matrizRotacao.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
-				
-		matrizObjeto = matrizRotacao.transformMatrix(matrizObjeto);
+			Ponto4D ponto = obterPontoCentral();
+		
+		this.rotacaoZPtoFixo(angulo, ponto.inverterSinal(ponto));
+		
+		//matrizObjeto = matrizRotacao.transformMatrix(matrizObjeto);
 		
 		
 //		anguloGlobal += 10.0; // rotacao em 10 graus
