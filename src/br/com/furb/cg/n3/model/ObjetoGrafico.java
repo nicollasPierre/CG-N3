@@ -81,29 +81,34 @@ public final class ObjetoGrafico {
 				}
 			gl.glEnd();
 
-			/*gl.glBegin(primitiva);
-				gl.glColor3f(255,0,0);
-				gl.glLineWidth(tamanho);
-				gl.glPointSize(tamanho);
-				gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
-				gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
-				gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
-				gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMax());
-
-			gl.glEnd(); */
-
-			for (ObjetoGrafico child : childrenObjects) {
-				child.desenha();
-			}
-
 		gl.glPopMatrix();
+
+		for (ObjetoGrafico child : childrenObjects) {
+			child.desenha();
+		}
+
+	}
+
+	public void desenhaBBox(){
+		gl.glBegin(primitiva);
+			gl.glColor3f(255,0,0);
+			gl.glLineWidth(1.0f);
+			gl.glPointSize(tamanho);
+			gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
+			gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
+			gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
+			gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMax());
+		gl.glEnd();
 	}
 
 	public void translacaoXYZ(double tx, double ty, double tz) {
 		Transformacao4D matrizTranslate = new Transformacao4D();
 		matrizTranslate.atribuirTranslacao(tx,ty,tz);
 		matrizObjeto = matrizTranslate.transformMatrix(matrizObjeto);
-		
+
+		for (ObjetoGrafico child : childrenObjects) {
+			child.translacaoXYZ(tx, ty, tz);
+		}
 	}
 
 	public void escalaXYZ(double Sx,double Sy) {
@@ -114,6 +119,9 @@ public final class ObjetoGrafico {
 		ponto = ponto.inverterSinal(ponto);
 		this.escalaXYZPtoFixo(Sx, Sy, ponto);
 
+		for (ObjetoGrafico child : childrenObjects) {
+			child.escalaXYZ(Sx, Sy);
+		}
 	}
 
 	public double obterXMinimo(){
@@ -170,14 +178,11 @@ public final class ObjetoGrafico {
 		Ponto4D ponto = this.getBbox().getCenterPoint();
 		
 		this.rotacaoZPtoFixo(angulo, ponto.inverterSinal(ponto));
-		
-		//matrizObjeto = matrizRotacao.transformMatrix(matrizObjeto);
-		
-		
-//		anguloGlobal += 10.0; // rotacao em 10 graus
-//		Transformacao4D matrizRotacaoZ = new Transformacao4D();		
-//		matrizRotacaoZ.atribuirRotacaoZ(Transformacao4D.DEG_TO_RAD * angulo);
-//		matrizObjeto = matrizRotacaoZ.transformMatrix(matrizObjeto);
+
+		for (ObjetoGrafico child : childrenObjects) {
+			child.rotacaoZ(angulo);
+		}
+
 	}
 	
 	public void atribuirIdentidade() {
