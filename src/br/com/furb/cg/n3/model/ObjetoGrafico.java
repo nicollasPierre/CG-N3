@@ -12,8 +12,9 @@ public final class ObjetoGrafico {
 	private BBox3D bbox = new BBox3D();
 	private ArrayList<ObjetoGrafico> childrenObjects = new ArrayList<>();
 	private boolean isChild = false;
-	private int[] cor = { 0, 0, 0 };
+	private float[] cor = { 0, 0, 0 };
 	private Transformacao4D matrizObjeto = new Transformacao4D();
+
 
 	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
 	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
@@ -37,11 +38,11 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 
-	public void setCor(int[] cor){
+	public void setCor(float[] cor){
 		this.cor = cor;
 	}
 	
-	public int[] getCor(){
+	public float[] getCor(){
 		return this.cor;
 	}
 	
@@ -64,6 +65,7 @@ public final class ObjetoGrafico {
 
 	public void desenha(boolean desenhaBbox) {
 		//gl.glColor3f(0.0f, 0.0f, 0.0f);
+		//gl.glColor3f(cor[0], cor[1], cor[2]);
 		gl.glColor3f(cor[0], cor[1], cor[2]);
 		gl.glLineWidth(tamanho);
 		gl.glPointSize(tamanho);
@@ -238,6 +240,12 @@ public final class ObjetoGrafico {
 		double t = (y - p1.obterY()) / (p2.obterY() - p1.obterY());
 		double x = p1.obterX() + (p2.obterX() - p1.obterX())*t;
 		return new Ponto4D(x, y,0,0);
+	}
+
+	public void setRGB(float red, float green, float blue){
+		this.cor[0] = red;
+		this.cor[1] = green;
+		this.cor[2] = blue;
 	}
 
 	private double getSmaller(double val1, double val2){

@@ -20,6 +20,10 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	private ArrayList<Ponto4D> objetoTempVertices;
 	private Ponto4D pontoMouse;
 	private ObjetoGrafico objetoTemporario;
+
+	private float red = 0;
+	private float green = 0;
+	private float blue = 0;
 	
 	private ArrayList<int[]> cores = new ArrayList<>();
 	private int indiceCores = 0;
@@ -87,7 +91,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
 
 		    if(!objeto.isChild()) {
-                objeto.desenha(mundo.getPoligonoSelecionado().equals(objeto));
+                objeto.desenha(objeto.equals(mundo.getPoligonoSelecionado()));
             }
 		}
 		
@@ -153,7 +157,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 				System.out.println("Sem polignos na lista");
 			}
 			break;
-		case KeyEvent.VK_J:
+		case KeyEvent.VK_K:
 			if (mundo.getPoligonoSelecionado() != null) {
 				mundo.getPoligonoSelecionado().rotacaoZ(0.5);
 			}
@@ -174,31 +178,45 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 			}
 			break;
 		case KeyEvent.VK_RIGHT:
-			mundo.getPoligonoSelecionado().translacaoXYZ(2.0, 0.0, 0.0);
-			mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().translacaoXYZ(2.0, 0.0, 0.0);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
 			break;
 		case KeyEvent.VK_LEFT:
-			mundo.getPoligonoSelecionado().translacaoXYZ(-2.0, 0.0, 0.0);
-			mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().translacaoXYZ(-2.0, 0.0, 0.0);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
 			break;
 		case KeyEvent.VK_UP:
-			mundo.getPoligonoSelecionado().translacaoXYZ(0.0, 2.0, 0.0);
-			mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().translacaoXYZ(0.0, 2.0, 0.0);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
 			break;
 		case KeyEvent.VK_DOWN:
-			mundo.getPoligonoSelecionado().translacaoXYZ(0.0, -2.0, 0.0);
-			mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().translacaoXYZ(0.0, -2.0, 0.0);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
 			break;
 		case KeyEvent.VK_R://Reseta matriz
-			mundo.getPoligonoSelecionado().atribuirIdentidade();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().atribuirIdentidade();
+			}
 			break;
         case KeyEvent.VK_P:
-            mundo.getPoligonoSelecionado().escalaXYZ(1.05, 1.05);
-            mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().escalaXYZ(1.05, 1.05);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
             break;
         case KeyEvent.VK_O:
-            mundo.getPoligonoSelecionado().escalaXYZ(0.95, 0.95);
-            mundo.getPoligonoSelecionado().exibeVertices();
+			if (mundo.getPoligonoSelecionado() != null) {
+				mundo.getPoligonoSelecionado().escalaXYZ(0.95, 0.95);
+				mundo.getPoligonoSelecionado().exibeVertices();
+			}
             break;
         case KeyEvent.VK_F:
             if (objetoTemporario == null) {
@@ -206,14 +224,18 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
             }
             break;
         case KeyEvent.VK_C:
-        	if(indiceCores == 2) {
-        		indiceCores = 0;
-			} else {
-				indiceCores++;
-			}
 
-        	mundo.getPoligonoSelecionado().setCor(cores.get(indiceCores));
-        	break;
+			if (mundo.getPoligonoSelecionado() != null) {
+				if (indiceCores == 2) {
+					indiceCores = 0;
+				} else {
+					indiceCores++;
+				}
+
+				//mundo.getPoligonoSelecionado().setCor(cores.get(indiceCores));
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
         case KeyEvent.VK_M:
         	mundo.getCamera().zoomOut(1);
         	break;
@@ -232,7 +254,45 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
         case KeyEvent.VK_NUMPAD2:
         	mundo.getCamera().pan(Camera2D.BAIXO, 1);
         	break;
+		case KeyEvent.VK_T:
+			if(red < 1.0f) {
+				System.out.println("passou red "+red);
+				red += 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
+		case KeyEvent.VK_Y:
+			if(green < 1.0f) {
+				green += 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
+		case KeyEvent.VK_U:
+			if(blue < 1.0f) {
+				blue += 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
+		case KeyEvent.VK_G:
+			if(red > 0.0f) {
+				red -= 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
+		case KeyEvent.VK_H:
+			if(green > 0.0f) {
+				green -= 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
+		case KeyEvent.VK_J:
+			if(blue > 0.0f) {
+				blue -= 0.1;
+				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
+			}
+			break;
 		}
+
 
 		glDrawable.display();
 	}

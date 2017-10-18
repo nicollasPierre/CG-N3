@@ -7,6 +7,10 @@ public class Mundo {
 	private ObjetoGrafico poligonoSelecionado;
 	private ArrayList<ObjetoGrafico> listaObjetos;
 	private int[] corFundo = {0,0,0};
+
+	private int red = 0;
+	private int green = 0;
+	private int blue = 0;
 	
 	
 	public Mundo() {
@@ -63,7 +67,6 @@ public class Mundo {
 		this.corFundo[1] = G;
 		this.corFundo[2] = B;
 	}
-	
 	
 	/**
 	 * Verifica a posição (x,y) está dentro da BBox de um objeto
