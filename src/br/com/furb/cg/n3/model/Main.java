@@ -222,7 +222,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
         	break;
         case KeyEvent.VK_NUMPAD8:
         	mundo.getCamera().pan(Camera2D.CIMA, 1);
-        	System.out.println("oi");
         	break;
         case KeyEvent.VK_NUMPAD4:
         	mundo.getCamera().pan(Camera2D.ESQUERDA, 1);

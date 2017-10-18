@@ -10,9 +10,6 @@ public class Camera2D {
 	public static final int CIMA = 3;
 	public static final int BAIXO = 4;
 	
-	
-	
-	
 	public Camera2D(double minX, double maxX, double minY, double maxY) {
 		super();
 		this.minX = minX;

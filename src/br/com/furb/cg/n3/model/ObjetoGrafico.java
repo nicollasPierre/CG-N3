@@ -13,18 +13,13 @@ public final class ObjetoGrafico {
 	private ArrayList<ObjetoGrafico> childrenObjects = new ArrayList<>();
 	private boolean isChild = false;
 	private int[] cor = { 0, 0, 0 };
-//	private int primitiva = GL.GL_POINTS;
-//	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
-
 	private Transformacao4D matrizObjeto = new Transformacao4D();
 
 	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
 	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
 	private static Transformacao4D matrizTmpTranslacaoInversa = new Transformacao4D();
 	private static Transformacao4D matrizTmpEscala = new Transformacao4D();		
-//	private static Transformacao4D matrizTmpRotacaoZ = new Transformacao4D();
 	private static Transformacao4D matrizGlobal = new Transformacao4D();
-//	private double anguloGlobal = 0.0;
 	
 	public ObjetoGrafico() {
 		
@@ -119,7 +114,7 @@ public final class ObjetoGrafico {
 
 	public void escalaXYZ(double Sx,double Sy) {
 		Transformacao4D matrizScale = new Transformacao4D();		
-		//matrizScale.atribuirEscala(Sx,Sy,1.0);
+		
 		matrizObjeto = matrizScale.transformMatrix(matrizObjeto);
 		Ponto4D ponto = this.getBbox().getCenterPoint();
 		ponto = ponto.inverterSinal(ponto);
@@ -129,54 +124,7 @@ public final class ObjetoGrafico {
 			child.escalaXYZ(Sx, Sy);
 		}
 	}
-
-	public double obterXMinimo(){
-		double menor = Double.MAX_VALUE;
-		for (int i = 0; i < getVertices().size(); i++) {
-			if(getVertices().get(i).obterX() < menor){
-				menor = getVertices().get(i).obterX();
-			}
-		}
-		return menor;
-	}
 	
-	public double obterYMinimo(){
-		double menor = Double.MAX_VALUE;
-		for (int i = 0; i < getVertices().size(); i++) {
-			if(getVertices().get(i).obterY() < menor){
-				menor = getVertices().get(i).obterY();
-			}
-		}
-		return menor;
-	}
-	
-	public double obterXMaximo(){
-		double maior = Double.MIN_VALUE;
-		for (int i = 0; i < getVertices().size(); i++) {
-			if(getVertices().get(i).obterX() > maior){
-				maior = getVertices().get(i).obterX();
-			}
-		}
-		return maior;
-	}
-	
-	public double obterYMaximo(){
-		double maior = Double.MIN_VALUE;
-		for (int i = 0; i < getVertices().size(); i++) {
-			if(getVertices().get(i).obterY() > maior){
-				maior = getVertices().get(i).obterY();
-			}
-		}
-		return maior;
-	}
-	
-	public Ponto4D obterPontoCentral(){
-		double x = (this.obterXMinimo() + this.obterXMaximo()) / 2d;
-		double y = (this.obterYMinimo() + this.obterYMaximo()) / 2d;
-		return new Ponto4D(x, y, 0.0, 0.0);
-	}
-	
-	///TODO: erro na rotacao
 	public void rotacaoZ(double angulo) {
 		Transformacao4D matrizRotacao = new Transformacao4D();
 		
@@ -192,7 +140,6 @@ public final class ObjetoGrafico {
 	}
 	
 	public void atribuirIdentidade() {
-//		anguloGlobal = 0.0;
 		matrizObjeto.atribuirIdentidade();
 	}
 
