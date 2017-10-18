@@ -83,14 +83,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 * gl.glVertex2d(testeX, testeY-5); gl.glEnd();
 		 */
 		desenhaSRU();
-		if(mundo.getPoligonoSelecionado() != null) {
-			mundo.getPoligonoSelecionado().setBbox();
-			mundo.getPoligonoSelecionado().desenhaBBox();
-		}
+
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
 
 		    if(!objeto.isChild()) {
-                objeto.desenha();
+                objeto.desenha(mundo.getPoligonoSelecionado().equals(objeto));
             }
 		}
 		
@@ -281,10 +278,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (mundo.getPoligonoSelecionado() != null) {
-			mouseUnitToGlUnit(e.getX(), e.getY());
-			glDrawable.display();
-		}
 
 		if (objetoTempVertices != null && objetoTempVertices.size() > 0){
 			mouseUnitToGlUnit(e.getX(), e.getY());
@@ -325,6 +318,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		default:
 			break;
 		}
+		glDrawable.display();
 
 	}
 

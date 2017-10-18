@@ -67,7 +67,7 @@ public final class ObjetoGrafico {
 		this.verticeSelecionado = verticeSelecionado;
 	}
 
-	public void desenha() {
+	public void desenha(boolean desenhaBbox) {
 		//gl.glColor3f(0.0f, 0.0f, 0.0f);
 		gl.glColor3f(cor[0], cor[1], cor[2]);
 		gl.glLineWidth(tamanho);
@@ -81,19 +81,25 @@ public final class ObjetoGrafico {
 				}
 			gl.glEnd();
 
+		if(desenhaBbox) {
+			this.setBbox();
+			this.desenhaBBox();
+		}
+
 		gl.glPopMatrix();
 
 		for (ObjetoGrafico child : childrenObjects) {
-			child.desenha();
+			child.desenha(false);
 		}
 
 	}
 
 	public void desenhaBBox(){
+
+		gl.glColor3f(255,0,0);
+		gl.glLineWidth(1.0f);
+		gl.glPointSize(tamanho);
 		gl.glBegin(primitiva);
-			gl.glColor3f(255,0,0);
-			gl.glLineWidth(1.0f);
-			gl.glPointSize(tamanho);
 			gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMax());
 			gl.glVertex2d(this.getBbox().getxMax(), this.getBbox().getyMin());
 			gl.glVertex2d(this.getBbox().getxMin(), this.getBbox().getyMin());
