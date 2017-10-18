@@ -256,7 +256,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
         	break;
 		case KeyEvent.VK_T:
 			if(red < 1.0f) {
-				System.out.println("passou red "+red);
 				red += 0.1;
 				mundo.getPoligonoSelecionado().setRGB(red, green, blue);
 			}
