@@ -83,18 +83,18 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		 * gl.glVertex2d(testeX, testeY-5); gl.glEnd();
 		 */
 		desenhaSRU();
+
 		for (ObjetoGrafico objeto : mundo.getListaObjetos()) {
 
 		    if(!objeto.isChild()) {
-                objeto.desenha();
+                objeto.desenha(mundo.getPoligonoSelecionado().equals(objeto));
             }
 		}
 		
 		if (objetoTempVertices != null && objetoTempVertices.size() > 0) {
 			desenhaTemp();
 		}
-		
-		// objeto.desenha();
+
 
 		gl.glFlush();
 	}
@@ -114,12 +114,13 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	
 	public void desenhaTemp() {
 		gl.glColor3f(0.0f, 0.0f, 0.0f);
-		gl.glBegin(GL.GL_LINE_STRIP);
+		gl.glBegin(GL.GL_LINE_LOOP);
 		for (int i = 0; i < objetoTempVertices.size(); i++) {
 			gl.glVertex2d(objetoTempVertices.get(i).obterX(), objetoTempVertices.get(i).obterY());
 		}
 		if (pontoMouse != null) {
 			gl.glVertex2d(pontoMouse.obterX(), pontoMouse.obterY());
+			System.out.println("valorX: " + pontoMouse.obterX() + "  valorY: " + pontoMouse.obterY());
 		}
 		gl.glEnd();
 	}
@@ -127,32 +128,6 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyCode()) {
-		/*
-		 * case KeyEvent.VK_P: objetos[0].exibeVertices(); break; case
-		 * KeyEvent.VK_M: objetos[0].exibeMatriz(); break;
-		 * 
-		 * case KeyEvent.VK_R: objetos[0].atribuirIdentidade(); break;
-		 * 
-		 * case KeyEvent.VK_RIGHT: objetos[0].translacaoXYZ(2.0, 0.0, 0.0);
-		 * break; case KeyEvent.VK_LEFT: objetos[0].translacaoXYZ(-2.0, 0.0,
-		 * 0.0); break; case KeyEvent.VK_UP: objetos[0].translacaoXYZ(0.0, 2.0,
-		 * 0.0); break; case KeyEvent.VK_DOWN: objetos[0].translacaoXYZ(0.0,
-		 * -2.0, 0.0); break;
-		 * 
-		 * case KeyEvent.VK_PAGE_UP: objetos[0].escalaXYZ(2.0, 2.0); break; case
-		 * KeyEvent.VK_PAGE_DOWN: objetos[0].escalaXYZ(0.5, 0.5); break;
-		 * 
-		 * case KeyEvent.VK_HOME: // objetos[0].RoracaoZ(); break;
-		 * 
-		 * case KeyEvent.VK_1: objetos[0].escalaXYZPtoFixo(0.5, new
-		 * Ponto4D(-15.0, -15.0, 0.0, 0.0)); break;
-		 * 
-		 * case KeyEvent.VK_2: objetos[0].escalaXYZPtoFixo(2.0, new
-		 * Ponto4D(-15.0, -15.0, 0.0, 0.0)); break;
-		 * 
-		 * case KeyEvent.VK_3: objetos[0].rotacaoZPtoFixo(10.0, new
-		 * Ponto4D(-15.0, -15.0, 0.0, 0.0)); break;
-		 */
 
 		case KeyEvent.VK_SPACE:
 			if (objetoTemporario != null) {
@@ -259,6 +234,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
         	mundo.getCamera().pan(Camera2D.BAIXO, 1);
         	break;
 		}
+
 		glDrawable.display();
 	}
 
@@ -302,12 +278,11 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (mundo.getPoligonoSelecionado() != null) {
-			mouseUnitToGlUnit(e.getX(), e.getY());
-			glDrawable.display();
-		}
+
 		if (objetoTempVertices != null && objetoTempVertices.size() > 0){
+			mouseUnitToGlUnit(e.getX(), e.getY());
 			pontoMouse = new Ponto4D(valorX, valorY, 0, 0);
+			System.out.println("valorX: " + valorX + "  valorY: " + valorY);
 			glDrawable.display();
 		}
 		// mouseMoviment(e.getX(), e.getY());
@@ -343,6 +318,7 @@ public class Main implements GLEventListener, KeyListener, MouseListener, MouseM
 		default:
 			break;
 		}
+		glDrawable.display();
 
 	}
 
